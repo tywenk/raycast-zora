@@ -1,4 +1,4 @@
-import { List, ActionPanel, Action, Detail, Icon } from "@raycast/api";
+import { List, ActionPanel, Action, Detail, Icon, showToast, Toast } from "@raycast/api";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useCollectionStats, useCollectionSales } from "../hooks/useZora";
@@ -25,14 +25,20 @@ const App = () => {
 };
 
 const SearchByContractAddress = () => {
-  const { data, isLoading } = useCollectionSales();
+  const { data, isLoading, isError, error } = useCollectionSales();
+
+  useEffect(() => {
+    if (isError) {
+      showToast(Toast.Style.Failure, error);
+    }
+  }, [isError, error]);
 
   return (
     <List isLoading={isLoading} searchBarPlaceholder="Enter Contract Address">
       {!data || data?.sales?.nodes?.length < 1 ? (
         <List.EmptyView icon={Icon.XMarkCircle} title="No sales" />
       ) : (
-        <List.Section title={data?.sales?.nodes?.[0]?.token?.tokenContract?.name || "hello"}>
+        <List.Section title={"Collection: " + data?.sales?.nodes?.[0]?.token?.tokenContract?.name || "hello"}>
           {data &&
             data?.sales?.nodes?.map((item, index) => {
               console.log(item?.sale?.price?.nativePrice);
@@ -40,7 +46,12 @@ const SearchByContractAddress = () => {
                 <List.Item
                   key={"item" + index}
                   title={"#" + item?.token?.tokenId || ""}
-                  subtitle={""}
+                  subtitle={item?.token?.tokenContract?.name || ""}
+                  accessories={[
+                    {
+                      text: `Sale ${item?.sale?.price?.nativePrice?.decimal} ${item?.sale?.price?.nativePrice?.currency?.name}`,
+                    },
+                  ]}
                   actions={
                     <ActionPanel title="#1 in raycast/extensions">
                       <Action.OpenInBrowser url="https://etherscan.com/raycast/extensions/pull/1" />
