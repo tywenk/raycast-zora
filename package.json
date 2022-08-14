@@ -1,7 +1,7 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "recent-nft-sales",
-  "title": "Recent NFT Sales",
+  "name": "nft-tools",
+  "title": "NFT tools",
   "description": "Recent sales from NFT Contract or Name",
   "icon": "command-icon.png",
   "author": "tywenk",
@@ -11,8 +11,8 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "search-by-contract-address",
-      "title": "Search by Contract Address",
+      "name": "nft-sales",
+      "title": "NFT Sales",
       "description": "Enter a contract address and get recent sales of that item",
       "mode": "view"
     }
