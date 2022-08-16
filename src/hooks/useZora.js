@@ -12,6 +12,7 @@ const zdk = new ZDK();
 
 const getCollectionSales = async ({ queryKey }) => {
   const [_, address, filter] = queryKey;
+
   const isValidAddr = /^0x[a-fA-F0-9]{40}$/g.test(address);
 
   if (!isValidAddr) {
@@ -24,14 +25,15 @@ const getCollectionSales = async ({ queryKey }) => {
     },
     sort: { sortDirection: filter.sortDirection, sortKey: filter.sortKey },
     filter: {},
-    includeFullDetails: false,
+    includeFullDetails: true,
+    includeMarkets: true,
     pagination: { limit: 5 },
   });
 };
 
 const useCollectionSales = (address, filter) => {
   return useQuery(["collection-stats", address, filter], getCollectionSales, {
-    enabled: !!address,
+    enabled: !!address && /^0x[a-fA-F0-9]{40}$/g.test(address),
     onSuccess: () => showToast({ style: Toast.Style.Success, title: "Success" }),
     onError: (error) => showToast({ style: Toast.Style.Failure, title: "Error", message: error?.message }),
   });
