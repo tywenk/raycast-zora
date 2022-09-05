@@ -1,3 +1,3 @@
 # Recent NFT Sales
 
-Recent sales from NFT Contract or Name
+Recent sales from NFT Contract or Name.
